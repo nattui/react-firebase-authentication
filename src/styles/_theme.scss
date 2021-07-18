@@ -1,0 +1,64 @@
+// ====================================================== /
+// Theme
+// ====================================================== /
+
+*,
+*::before,
+*::after {
+  // Default border box
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  height: 100%;
+  touch-action: manipulation; // Disable additional non-standard gestures such as double-tap to zoom
+}
+
+body {
+  // Safari iOS
+  -webkit-tap-highlight-color: transparent; // Disable tap highlight
+  -webkit-text-size-adjust: none; // Disable text size adjust
+
+  // Font related
+  font-feature-settings: "rlig" 1, "calt" 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased; // From CRA
+  -moz-osx-font-smoothing: grayscale; // From CRA
+
+  // Base
+  margin: 0;
+  min-height: 100%;
+  position: relative; // Absolute elements height can go further than viewpoint
+  width: 100%;
+}
+
+// Preflight
+// Default margins are removed
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+// Images are block-level
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+}
