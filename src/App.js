@@ -12,7 +12,7 @@ const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
 
 export default function App() {
   const [isAuthenticated, setAuthentication] = useState(useContext(AuthContext));
-  console.log('isAuthenticated:', isAuthenticated);
+  if (process.env.NODE_ENV === 'development') console.log('isAuthenticated:', isAuthenticated);
 
   useEffect(() => {
     // Things you should know: auth.onAuthStateChanged follows the observer pattern needs
@@ -26,18 +26,23 @@ export default function App() {
     });
   }, []);
 
+  function renderHome() {
+    if (isAuthenticated === false) {
+      return <Login />;
+    } else if (isAuthenticated === true) {
+      return <Dashboard />;
+    } else {
+      return null;
+    }
+  }
+
   return (
     <AuthContext.Provider value={[isAuthenticated, setAuthentication]}>
       <Router>
         <Header />
         <Suspense fallback={null}>
           <Switch>
-            <Route exact path='/'>
-              {isAuthenticated === false ?
-                <Login /> :
-                <Dashboard />
-              }
-            </Route>
+            <Route exact path='/'>{renderHome}</Route>
             <Route path='/login'><Login /></Route>
             <Route path='/signup'><Signup /></Route>
             <Route path='/dashboard'><Dashboard /></Route>
@@ -45,6 +50,7 @@ export default function App() {
           </Switch>
         </Suspense>
         <Toaster
+          gutter={16}
           position="top-right"
           toastOptions={{ className: styles.toast }}
           containerStyle={{ top: 88 }}

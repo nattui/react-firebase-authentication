@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import AuthContext from '../../contexts/AuthContext';
 import { auth } from '../../utils/firebase.config';
 import styles from './Dashboard.module.scss';
@@ -11,6 +12,7 @@ export default function Dashboard() {
   async function signOut() {
     await auth.signOut();
     setAuthentication(false);
+    toast.success('You have successfully sign out.');
   }
 
   return (
