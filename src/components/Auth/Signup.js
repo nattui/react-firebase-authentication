@@ -1,17 +1,18 @@
 import { useContext, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AuthContext from '../../contexts/AuthContext';
 import { auth } from '../../utils/firebase.config';
-import styles from './Forms.module.scss';
+import styles from './Auth.module.scss';
 
-export default function Login() {
-  const setAuthentication = useContext(AuthContext)[1];
+export default function Signup() {
+  const [isAuthenticated, setAuthentication] = useContext(AuthContext);
   const [isButtonDisabled, setButtonState] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
+  if (isAuthenticated === true) return <Redirect to='/' />
 
-  async function login(event) {
+  async function signup(event) {
     event.preventDefault();
     setButtonState(true);
 
@@ -19,32 +20,21 @@ export default function Login() {
     const password = passwordRef.current.value;
 
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      await auth.createUserWithEmailAndPassword(email, password);
       setAuthentication(true);
-      toast.success('You have successfully login.');
+      toast.success('Your account has been successfully created.');
     } catch (error) {
-      let message = '';
-      switch (error.code) {
-        case 'auth/user-not-found':
-          message = 'There is no account associated with this email address.';
-          break;
-        case 'auth/wrong-password':
-          message = 'Wrong password. Try again.';
-          break;
-        default:
-          message = error.message;
-      }
-      toast.error(message);
+      toast.error(error.message);
+      setButtonState(false);
     }
-    setButtonState(false);
   }
 
   return (
     <section className={styles.base}>
       <div className={styles.wrapper}>
         <div className={styles.container}>
-          <h2>Sign in</h2>
-          <form onSubmit={login}>
+          <h2>Create Account</h2>
+          <form onSubmit={signup}>
             <label htmlFor="email">Email address</label>
             <input
               type="email"
@@ -61,13 +51,16 @@ export default function Login() {
               type="password"
               id="password"
               name="password"
-              autoComplete="current-password"
+              placeholder="6+ characters"
+              minLength="6"
+              maxLength="100"
+              autoComplete="new-password"
               required
               ref={passwordRef}
             />
-            <button disabled={isButtonDisabled}>Login</button>
+            <button disabled={isButtonDisabled}>Create Account</button>
           </form>
-          <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
+          <p>Already have an account? <Link to="/login">Sign in</Link></p>
         </div>
       </div>
     </section>

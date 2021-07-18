@@ -6,8 +6,9 @@ import { auth } from './utils/firebase.config';
 import styles from './App.module.scss';
 
 import Header from './components/Header/Header';
-const Login = lazy(() => import('./components/forms/Login'));
-const Signup = lazy(() => import('./components/forms/Signup'));
+const Login = lazy(() => import('./components/Auth/Login'));
+const Signup = lazy(() => import('./components/Auth/Signup'));
+const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'));
 
 export default function App() {
   const [isAuthenticated, setAuthentication] = useState(useContext(AuthContext));
@@ -31,9 +32,15 @@ export default function App() {
         <Header />
         <Suspense fallback={null}>
           <Switch>
-            <Route exact path='/'><Login /></Route>
+            <Route exact path='/'>
+              {isAuthenticated === false ?
+                <Login /> :
+                <Dashboard />
+              }
+            </Route>
             <Route path='/login'><Login /></Route>
             <Route path='/signup'><Signup /></Route>
+            <Route path='/dashboard'><Dashboard /></Route>
             <Route path='*'><Redirect to='/' /></Route>
           </Switch>
         </Suspense>
