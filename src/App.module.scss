@@ -1,0 +1,12 @@
+.toast {
+  font-size: 14px;
+  padding: 12px;
+
+  & > div:nth-child(1) {
+    align-self: flex-start;
+  }
+
+  & > div:nth-child(2) {
+    margin: 0 10px;
+  }
+}
