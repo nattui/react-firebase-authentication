@@ -64,7 +64,7 @@
   & button {
     border: none;
     border-radius: 4px;
-    background-color: #6353ff;
+    background-color: hsl(246, 100%, 66%);
     color: #ffffff;
     cursor: pointer;
     font-family: var(--font-family);
@@ -73,6 +73,11 @@
     min-height: 48px;
     padding: 12px 32px;
     width: 100%;
+    transition: opacity var(--transition-time);
+
+    &:disabled {
+      opacity: 0.5;
+    }
   }
 
   & p {

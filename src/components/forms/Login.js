@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useContext, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AuthContext from '../../contexts/AuthContext';
@@ -7,19 +7,21 @@ import styles from './Forms.module.scss';
 
 export default function Login() {
   const setAuthentication = useContext(AuthContext)[1];
+  const [isButtonDisabled, setButtonState] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
 
   async function login(event) {
     event.preventDefault();
+    setButtonState(true);
+
     const email = emailRef.current.value.trim();
     const password = passwordRef.current.value;
 
     try {
       await auth.signInWithEmailAndPassword(email, password);
-      // State global user data
       setAuthentication(true);
-      toast.success('Login successful.');
+      toast.success('You have successfully login.');
     } catch (error) {
       let message = '';
       switch (error.code) {
@@ -34,6 +36,7 @@ export default function Login() {
       }
       toast.error(message);
     }
+    setButtonState(false);
   }
 
   return (
@@ -42,13 +45,13 @@ export default function Login() {
         <div className={styles.container}>
           <h2>Sign in</h2>
           <form onSubmit={login}>
-            <label htmlFor="login">Email address</label>
+            <label htmlFor="email">Email address</label>
             <input
-              type="text"
-              id="login"
-              name="login"
+              type="email"
+              id="email"
+              name="email"
               autoCapitalize="off"
-              autoComplete="username"
+              autoComplete="email"
               spellCheck="false"
               required
               ref={emailRef}
@@ -62,7 +65,7 @@ export default function Login() {
               required
               ref={passwordRef}
             />
-            <button>Login</button>
+            <button disabled={isButtonDisabled}>Login</button>
           </form>
           <p>Don't have an account? <Link to="/signup">Sign up</Link></p>
         </div>

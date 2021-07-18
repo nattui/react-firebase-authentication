@@ -39,12 +39,8 @@ export default function App() {
         </Suspense>
         <Toaster
           position="top-right"
-          toastOptions={{
-            className: styles.toast
-          }}
-          containerStyle={{
-            top: 88,
-          }}
+          toastOptions={{ className: styles.toast }}
+          containerStyle={{ top: 88 }}
         />
       </Router>
     </AuthContext.Provider>
