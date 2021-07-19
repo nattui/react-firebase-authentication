@@ -35,8 +35,9 @@ export default function Login() {
         default:
           message = error.message;
       }
-      toast.error(message);
+      passwordRef.current.value = '';
       setButtonState(false);
+      toast.error(message);
     }
   }
 

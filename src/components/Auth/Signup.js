@@ -24,8 +24,9 @@ export default function Signup() {
       setAuthentication(true);
       toast.success('Your account has been successfully created.');
     } catch (error) {
-      toast.error(error.message);
+      passwordRef.current.value = '';
       setButtonState(false);
+      toast.error(error.message);
     }
   }
 
