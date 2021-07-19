@@ -48,6 +48,7 @@ export default function Signup() {
               maxLength="32"
               autoComplete="name"
               spellCheck="false"
+              autoFocus
               required
               ref={nameRef}
             />

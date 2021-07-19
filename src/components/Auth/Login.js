@@ -55,6 +55,7 @@ export default function Login() {
               autoCapitalize="off"
               autoComplete="email"
               spellCheck="false"
+              autoFocus
               required
               ref={emailRef}
             />
