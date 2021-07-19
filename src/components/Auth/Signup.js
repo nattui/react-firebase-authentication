@@ -8,9 +8,8 @@ import styles from './Auth.module.scss';
 export default function Signup() {
   const [isAuthenticated, setAuthentication] = useContext(AuthContext);
   const [isButtonDisabled, setButtonState] = useState(false);
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  if (isAuthenticated === true) return <Redirect to='/' />
+  const emailRef = useRef('');
+  const passwordRef = useRef('');
 
   async function signup(event) {
     event.preventDefault();
@@ -30,6 +29,7 @@ export default function Signup() {
     }
   }
 
+  if (isAuthenticated === true) return <Redirect to='/' />
   return (
     <section className={styles.base}>
       <div className={styles.wrapper}>
