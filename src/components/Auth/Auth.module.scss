@@ -55,6 +55,11 @@
     transition: border-color var(--transition-time), box-shadow var(--transition-time);
     width: 100%;
 
+    &::placeholder {
+      color: var(--gray11);
+      opacity: 1 !important; // Force browsers to use correct colors
+    }
+
     &:focus {
       border-color: var(--violet7);
       box-shadow: 0 0 0 1px var(--violet7), inset 0 0 0 1px var(--violet7);
