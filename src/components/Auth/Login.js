@@ -22,7 +22,7 @@ export default function Login() {
     try {
       await auth.signInWithEmailAndPassword(email, password);
       setAuthentication(true);
-      toast.success('You have successfully login.');
+      toast.success('You have successfully logged in.');
     } catch (error) {
       let message = '';
       switch (error.code) {

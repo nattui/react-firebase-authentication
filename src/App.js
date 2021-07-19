@@ -42,7 +42,7 @@ export default function App() {
         <Header />
         <Suspense fallback={null}>
           <Switch>
-            <Route exact path='/'>{renderHome}</Route>
+            <Route exact path='/'>{renderHome()}</Route>
             <Route path='/login'><Login /></Route>
             <Route path='/signup'><Signup /></Route>
             <Route path='/dashboard'><Dashboard /></Route>
