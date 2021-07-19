@@ -19,7 +19,7 @@ export default function Dashboard() {
         setAuthentication(false);
         toast.success('You have successfully deleted account.');
       } catch (error) {
-        toast.error('Account is not deleted.');
+        toast.error('You need to login again before deleting account.');
       } finally {
         deleteUserPending = false;
       }

@@ -62,3 +62,8 @@ embed,
 object {
   display: block;
 }
+
+// Optionated: Remove top inner shadow in Safari iOS
+input {
+  -webkit-appearance: none;
+}
