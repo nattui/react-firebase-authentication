@@ -94,3 +94,20 @@
     white-space: nowrap;
   }
 }
+
+@media only screen and (max-width: 480px) {
+  .base {
+    background-color: #ffffff;
+  }
+
+  .wrapper {
+    margin: 0;
+  }
+
+  .container {
+    border: none;
+    box-shadow: none;
+    margin: 16px 0;
+    padding: 48px var(--global-margins);
+  }
+}
