@@ -8,6 +8,7 @@ import styles from './Auth.module.scss';
 export default function Signup() {
   const [isAuthenticated, setAuthentication] = useContext(AuthContext);
   const [isButtonDisabled, setButtonState] = useState(false);
+  const nameRef = useRef('');
   const emailRef = useRef('');
   const passwordRef = useRef('');
 
@@ -15,11 +16,14 @@ export default function Signup() {
     event.preventDefault();
     setButtonState(true);
 
+    const name = nameRef.current.value.trim();
     const email = emailRef.current.value.trim();
     const password = passwordRef.current.value;
 
     try {
-      await auth.createUserWithEmailAndPassword(email, password);
+      const { user } = await auth.createUserWithEmailAndPassword(email, password);
+      user.updateProfile({ displayName: name });
+      await auth.signInWithEmailAndPassword(email, password); // Force auth.currentUser to update
       setAuthentication(true);
       toast.success('Your account has been successfully created.');
     } catch (error) {
@@ -36,6 +40,17 @@ export default function Signup() {
         <div className={styles.container}>
           <h2>Create Account</h2>
           <form onSubmit={signup}>
+            <label htmlFor="name">Full name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              maxLength="32"
+              autoComplete="name"
+              spellCheck="false"
+              required
+              ref={nameRef}
+            />
             <label htmlFor="email">Email address</label>
             <input
               type="email"
