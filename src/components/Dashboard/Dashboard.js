@@ -23,15 +23,16 @@ export default function Dashboard() {
       } finally {
         deleteUserPending = false;
       }
-    } else if (event.keyCode === 32) {
-      // Learning about Firebase user data management
-      try {
-        auth.currentUser.updateProfile({ displayName: 'James Bond' });
-        toast.success('You have successfully changed name.');
-      } catch (error) {
-        toast.error('Name not updated.');
-      }
     }
+    // else if (event.keyCode === 32) {
+    //   // Learning about Firebase user data management
+    //   try {
+    //     auth.currentUser.updateProfile({ displayName: 'James Bond' });
+    //     toast.success('You have successfully changed name.');
+    //   } catch (error) {
+    //     toast.error('Name not updated.');
+    //   }
+    // }
   }
 
   useEffect(() => {
