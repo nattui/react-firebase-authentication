@@ -2,7 +2,7 @@ import { useContext, useState, useRef } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import AuthContext from '../../contexts/AuthContext';
-import { auth } from '../../utils/firebase.config';
+import { auth } from '../../utils/firebase';
 import styles from './Auth.module.scss';
 
 export default function Signup() {
@@ -33,6 +33,7 @@ export default function Signup() {
     }
   }
 
+  if (isAuthenticated === null) return null;
   if (isAuthenticated === true) return <Redirect to='/' />
   return (
     <section className={styles.base}>

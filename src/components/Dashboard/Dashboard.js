@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import toast from 'react-hot-toast';
 import AuthContext from '../../contexts/AuthContext';
-import { auth } from '../../utils/firebase.config';
+import { auth } from '../../utils/firebase';
 import styles from './Dashboard.module.scss';
 
 export default function Dashboard() {

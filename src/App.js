@@ -2,7 +2,7 @@ import { useState, useContext, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import AuthContext from './contexts/AuthContext';
-import { auth } from './utils/firebase.config';
+import { auth } from './utils/firebase';
 import styles from './App.module.scss';
 
 import Header from './components/Header/Header';
