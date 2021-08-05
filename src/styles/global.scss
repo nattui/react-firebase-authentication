@@ -1,5 +1,4 @@
 @import "theme";
-@import "fonts";
 
 :root {
   // Colors
@@ -47,7 +46,7 @@
   --global-width: 1080px;
 
   // Font
-  --font-family: Silka, -apple-system, sans-serif;
+  --font-family: "Inter", -apple-system, sans-serif;
 
   // Time
   --transition-time: 200ms;
