@@ -1,15 +1,12 @@
-# React and Firebase Authentication
-
-
-## A guide for protected routes and user data management
-
-React is one of the most popular front-end frameworks in building web user interfaces. When creating a web application, you will often need to tell whether a person is logged in or not and navigate them to the sections you want them to use. Starter projects tend to follow this page paradigm: create account, sign in, and dashboard page. Users cannot see the dashboard page unless they are authenticated. If you need a free, small to medium project solution in user authentication or want to put yourself in the learning authentication headspace, using Firebase Authentication is beneficial.
-
-I have been learning and using Firebase since 2018, and this is the most eloquent way I've been writing it. Just note that Firebase was not initially designed for React, and it has many services, not just for the web. I would say Firebase’s primary focus and marketing is for mobile right now.
+React is one of the most popular front-end frameworks in building web user interfaces. When creating a web application, you will often need to tell whether a person is logged in or not and then navigate them to the sections you want them to use. Starter projects tend to follow this page paradigm: create account, sign in, and dashboard page. Users cannot see the dashboard page unless they are authenticated. If you need a free, small to medium project solution in user authentication or want to put yourself in the learning authentication headspace, using Firebase Authentication is beneficial.
 
 I’m going to show you how to link React and Firebase Authentication together. The web application will have three pages. I’ll be using React Hooks, React Context, and Firebase Web v8 APIs. At the time of writing, Firebase Web v9 is in beta. I’ll briefly explain React Context in this tutorial as when I was learning Firebase, I didn’t know it well enough to form a good software design pattern. This guide assumes you have some knowledge in React and JavaScript however.
 
 ![screens.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1626823549373/2yfUvnFcx.png)
+
+- GitHub:  [https://github.com/nattwasm/react-firebase-authentication](https://github.com/nattwasm/react-firebase-authentication)
+- Live Demo:  [https://authentication-example.vercel.app/](https://authentication-example.vercel.app/)
+- Article: [https://nattwasm.hashnode.dev/react-firebase-authentication](https://nattwasm.hashnode.dev/react-firebase-authentication)
 
 
 ### Folder structure
@@ -25,24 +22,25 @@ The file and folders that we’ll take a look at for this guide are:
     └── App.js
 ```
 
-[components](#components) hold React components. In this app, we have the header, form, and dashboard.
+[components](#components) hold React components. In this app, we have the header, dashboard, and auth forms.
 
-[contexts](#context) hold React contexts. We use it as a form of global variable to check whether the user is authenticated or not.
+[contexts](#context) hold React contexts. We use it as a form of global variables to check whether the user is authenticated or not. It's one file for this directory.
 
-[utils](#utils) hold the firebase configurations.
+[utils](#utils) hold the firebase configurations. Another one file for this directory.
 
 
 ### utils
 
-The utils folder would hold a singular `firebase.js` file that contains the Firebase configurations. This folder is an excellent place to put your Firebase helper functions here too.
+The utils folder in this project would hold a singular `firebase.js` file that contains the Firebase configurations. This folder is an excellent place to put your Firebase helper functions here too.
 
 In the Firebase console, select add web app in the project overview page and get the Firebase configurations.
 
 ![firebase.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1626824322127/aE672KYe7Y.png)
 
-Install Firebase in your web project with `npm install firebase` and then you should see it in `package.json`.
+Install Firebase in your web project with `npm install firebase` and then you should see it in `package.json`. Then, we set our`firebase.js` file like this:
 
 ```js
+// utils/firebase.js
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
@@ -63,6 +61,7 @@ We can now use Firebase auth throughout the project.
 In the side note, you can add more Firebase services in the future like this:
 
 ```js
+// utils/firebase.js
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
@@ -90,6 +89,7 @@ We are going to use a variable called `isAuthenticated` to determine authenticat
 The contexts folder would hold a singular `AuthContext.js` file that contains the authentication context. The initial `createContext` state is `null` as the website is pending data. It’s then going to change to true or false. This auth status information is available throughout the app.
 
 ```js
+// contexts/AuthContext.js
 import { createContext } from 'react';
 
 export default createContext(null);
@@ -107,6 +107,7 @@ The file `App.js` is where routing and important auth logic happens. The snippet
 It took me a while to understand React Context API. When I was first learning Firebase, I thought Firebase would handle user data management and renders for me. Again, Firebase was not initially designed for React. We need to use state management like React Context to handle auth logic and renders.
 
 ```js
+// App.js
 import { useState, useContext } from 'react';
 import AuthContext from './contexts/AuthContext';
 
@@ -129,11 +130,8 @@ The initial state of the context is `null`. We designed the app so `null` means 
 
 There is a bit to unpacked here. The website would run `auth.onAuthStateChanged`. The `onAuthStateChanged` follows the observer pattern. So to make it run well with the React paradigm, we need to `unsubscribe` or terminate the observer after we know the `user` is not null. The line `auth.onAuthStateChanged` runs once. We just need to know the variable `user` exists. That is how we know whether the user is authenticated or not.
 
-Why am I the only one to write it in this way? Not `return unsubscribe` so `useEffect` can terminate the observer in cleanup.
-
-That's what I did at first when following other tutorials, but here is why I did it this way. I noticed a double print out when I `console.log('isAuthenticated:', isAuthenticated)` every time the value gets changed. I use print outs and Chrome debugger to debug. The double render annoyed me as I always use the template of Create React App and it comes with `React.StrictMode`. To future proof myself for React incoming concurrent mode feature, I wanted to ensure a deterministic development cycle. I converted the observer pattern to run only once after completion. It follows the React paradigm, and I recommend this method.
-
 ```js
+// App.js (Did do)
 import { useState, useContext, useEffect } from 'react';
 import AuthContext from './contexts/AuthContext';
 
@@ -149,6 +147,23 @@ export default function App() {
     });
   }, []);
 
+ ...
+```
+
+Why am I the only one to write it in this way? Not `return unsubscribe` so `useEffect` can terminate the observer in cleanup.
+
+That's what I did at first when following other tutorials, but here is why I did it this way. I noticed a double print out when I `console.log('isAuthenticated:', isAuthenticated)` every time the value gets changed. I use print outs and Chrome debugger to debug. The double render annoyed me as I always use the template of Create React App and it comes with `React.StrictMode`. To future proof myself for React incoming concurrent mode feature, I wanted to ensure a deterministic development cycle. I converted the observer pattern to run only once after completion. It follows the React paradigm, and I recommend this method.
+
+```js
+// App.js (Didn't do)
+useEffect(() => {
+  const unsubscribe = auth.onAuthStateChanged(user => {
+    user ?
+      setAuthentication(true) :
+      setAuthentication(false);
+  });
+  return unsubscribe;
+}, []);
  ...
 ```
 
@@ -183,6 +198,7 @@ return (
 In order to use the context, we import it in and use it just like we would for `useState`. The only difference is the `isAuthenticated` variable is available throughout the app. The `isAuthenticated` variable has three states: null, false, and true. When the user data is pending, show nothing and wait until it resolves to false or true. If true, show dashboard. If false, show signup. This process of checking whether the user can visit a section of the page is an example of auth protected routes.
 
 ```js
+// components/Auth/Signup.js
 import { Redirect, Link } from 'react-router-dom';
 import AuthContext from '../../contexts/AuthContext';
 
@@ -207,6 +223,7 @@ export default function Signup() {
 When the form submits, it runs the signup function and grabs the email and password string and pass it along to Firebase Auth's `createUserWithEmailAndPassword(email, password)` which let's Firebase handles user creation. When the user successfully creates an account, `setAuthentication(true)` runs and subsequently `isAuthenticated` will turn true. Now the route logic will redirect the user to the dashboard route where they will see the dashboard screen.
 
 ```js
+// components/Auth/Signup.js
 import { useContext, useRef } from 'react';
 import { Redirect, Link } from 'react-router-dom';
 import AuthContext from '../../contexts/AuthContext';
@@ -258,4 +275,8 @@ export default function Signup() {
 
 ### Conclusion
 
-That concludes this guide. We got to look a React design pattern, set up Firebase authentication, use React Context, and auth protect routes.
+That concludes this guide. We got to look at a React design pattern, set up Firebase authentication, use React Context, and auth protect routes.
+
+- GitHub:  [https://github.com/nattwasm/react-firebase-authentication](https://github.com/nattwasm/react-firebase-authentication)
+- Live Demo:  [https://authentication-example.vercel.app/](https://authentication-example.vercel.app/)
+- Article: [https://nattwasm.hashnode.dev/react-firebase-authentication](https://nattwasm.hashnode.dev/react-firebase-authentication)
